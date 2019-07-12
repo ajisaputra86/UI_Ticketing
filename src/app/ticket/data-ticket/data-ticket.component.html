@@ -1,0 +1,150 @@
+<app-navigation></app-navigation>
+
+<!-- BreadCrumb -->
+<div class="ui ui-sm-12 ui-md-12 ui-lg-12 ui-xl-12">
+  <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+</div>
+
+<div class="ui-g header">
+  <div class="ui-g-12 ui-sm-7 ui-md-8 ui-md-offset-1  ui-lg-9 ui-lg-offset-1 ui-xl-9 header-title">
+    <div class="title">
+      <b>TICKET</b>
+    </div>
+  </div>
+  
+  <div class="ui-g-12 ui-sm-3 ui-md-2 ui-lg-1 ui-xl-1 header-button">
+    <button pButton [hidden]="!active" class="btn-add" type="button" icon="fa-plus" label="ADD" routerLink="/ticket/form-ticket"></button>
+  </div>
+</div>
+
+
+<table class="ui-g-12 ui-sm-9 ui-md-10 ui-md-offset-1 ui-lg-10 ui-lg-offset-1 ui-xl-10 table-bordered">
+  
+  
+  
+  <div class="ui-g option">
+    <!-- <div class="ui-g-12 ui-sm-9 ui-md-10 ui-lg-9 ui-xl-10 option-search">
+      Search
+      <input #gb class="input-search" type="text" pInputText size="50" placeholder="Search by title, code, name">
+    </div> -->
+    
+    <div class="ui-g-12 ui-sm-9 ui-md-10 ui-lg-9 ui-xl-10 option-status">
+      Status
+      <p-radioButton class="btn-status" name="group2" value="" label="All" [(ngModel)]="status" (click)='getAllTicket()'></p-radioButton>
+      <p-radioButton class="btn-status" name="group2" value="open" label="Open" [(ngModel)]="status" (click)='getTicketOpen()'></p-radioButton>
+      <p-radioButton class="btn-status" name="group2" value="close" label="Close" [(ngModel)]="status" (click)='getTicketClose()'></p-radioButton>
+      <p-radioButton class="btn-status" name="group2" value="reopen" label="Re-Open" [(ngModel)]="status" (click)='getTicketReopen()'></p-radioButton>
+    </div>
+    
+  </div>
+  
+  <div class="ui-g-12 ui-sm-12 ui-md-12 ui-lg-12 ui-xl-12">
+    <ng-container *ngIf="status === 'open'">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <p-dataList [value]="ticketOpen" [paginator]="true" [rows]="5" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+          <p-header>
+            Open Ticket
+          </p-header>
+          <ng-template let-tkt_open pTemplate="item">
+            <div class="ui-g ui-fluid ticket-item border">
+              <div class="ui-g-12 ui-md-3" style="text-align:center; background-color: #1da863;">
+                <!-- <img src="data:image/jpeg;base64,{{tkt.customer.imageId.image}}" width="60" height="60" style="margin-top: 5px;"> -->
+              </div>
+              <div class="ui-g-12 ui-md-9" style="background-color: #08cf5d; color: ivory">
+                <div class="ui-g-12 ui-sm-6" id="title"> <a routerLink="/ticket/detail/{{tkt_open.id}}"><b>{{tkt_open.title}}</b></a></div>
+                <div class="ui-g-12 ui-sm-6" id="name">{{tkt_open.ticketCode }} </div>
+                <!-- <ng-container *ngIf="role == 'agent'; else elseOpen">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt.customer.name}} </div>
+                </ng-container>
+                <ng-template #elseOpen>
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt.agent.name}} </div>
+                </ng-template>
+                 -->
+                <ng-container *ngIf="role == 'agent';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_open.customer.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'customer';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_open.agent.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'admin';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_open.agent.name}} </div>
+                </ng-container>
+                
+                <div class="ui-g-6 ui-sm-6" id="name">{{tkt_open.ticketDate | date}}</div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataList>
+      </div>
+    </ng-container>
+    
+    <ng-container *ngIf="status === 'close'">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <p-dataList [value]="ticketClose" [paginator]="true" [rows]="5" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+          <p-header>
+            Close Ticket
+          </p-header>
+          <ng-template let-tkt_close pTemplate="item">
+            <div class="ui-g ui-fluid car-item border">
+              <div class="ui-g-12 ui-md-3" style="text-align:center; background-color: #c4afaf">
+                <!-- <img src="data:image/jpeg;base64,{{tkt.customer.imageId.image}}" width="60" height="60" style="margin-top: 5px;"> -->
+              </div>
+              <div class="ui-g-12 ui-md-9" style="background-color: #fad9db">
+                <div class="ui-g-10 ui-sm-6" id="title"><a routerLink="/ticket/detail/{{tkt_close.id}}"><b>{{tkt_close.title}}</b></a></div>
+                <div class="ui-g-12 ui-sm-6" id="name">{{tkt_close.ticketCode }} </div>                  
+
+                <ng-container *ngIf="role == 'agent';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_close.customer.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'customer';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_close.agent.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'admin';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_close.agent.name}}</div>
+                </ng-container>
+
+                <div class="ui-g-6 ui-sm-6" id="name">{{tkt_close.ticketDate | date}}</div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataList>
+      </div>
+    </ng-container>
+    
+    <ng-container *ngIf="status === 'reopen'">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <p-dataList [value]="ticketReopen" [paginator]="true" [rows]="5" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+          <p-header>
+            RE-Open Ticket
+          </p-header>
+          <ng-template let-tkt_reopen pTemplate="item">
+            <div class="ui-g ui-fluid car-item border">
+              <div class="ui-g-12 ui-md-3" style="text-align:center; background-color: #FFFACD">
+                <!-- <img src="data:image/jpeg;base64,{{tkt.customer.imageId.image}}" width="60" height="40" style="margin-top: 5px;"> -->
+              </div>
+              <div class="ui-g-12 ui-md-9" style="background-color: #FFFACD">
+                <div class="ui-g-10 ui-sm-6" id="title"><a routerLink="/ticket/detail/{{tkt_reopen.id}}"><b>{{tkt_reopen.title}}</b></a></div>
+                <div class="ui-g-12 ui-sm-6" id="name">{{tkt_reopen.ticketCode}} </div>
+                
+                <ng-container *ngIf="role == 'agent';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_reopen.customer.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'customer';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_reopen.agent.name}} </div>
+                </ng-container>
+                <ng-container *ngIf="role == 'admin';">
+                  <div class="ui-g-6 ui-sm-6" id="name">{{tkt_reopen.agent.name}} </div>
+                </ng-container>
+
+
+                <div class="ui-g-6 ui-sm-6" id="name">{{tkt_reopen.ticketDate | date}}</div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataList>
+      </div>
+    </ng-container>
+    
+  </div>
+  
+</table>
